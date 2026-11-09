@@ -1,21 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr" id="html-root">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Yummy Nam | Korean Street Food</title>
+<title>Yummy Nom | Korean Street Food</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --cream:#fdf3e7;
-  --pink:#f4b3c2;
-  --pink-dark:#e8869b;
-  --panel:#f9cfd9;
-  --text:#4a2a33;
-  --ink:#5b2433;
-  --rose:#c9506a;
+  --cream:#fff1d6;
+  --pink:#f7b6d2;
+  --pink-dark:#e8789f;
+  --panel:#f7b6d2;
+  --text:#3a2a55;
+  --ink:#3a2a55;
+  --rose:#e8789f;
   --white:#fff;
   --shadow:0 5px 16px rgba(150,70,90,.12);
 }
@@ -28,7 +28,7 @@ body{
   margin:0;
   background:var(--cream);
   color:var(--text);
-  font-family:'Nunito',sans-serif;
+  font-family:'Sitka Text','Sitka Small',Sitka,Georgia,serif;
   line-height:1.6;
 }
 
@@ -44,7 +44,7 @@ html[lang="ar"] body{
 }
 
 h1,h2,h3{
-  font-family:'Fredoka','Amiri',sans-serif;
+  font-family:'Sitka Small','Sitka Text',Sitka,Georgia,'Amiri',serif;
 }
 
 html[lang="ar"] h1,
@@ -71,12 +71,12 @@ img{max-width:100%}
 /* BUTTONS */
 
 .btn{
-  background:linear-gradient(135deg,#f0a0b2,#e47f97);
+  background:linear-gradient(135deg,#e8789f,#e8789f);
   color:white;
   font-weight:800;
   border-radius:30px;
   padding:12px 25px;
-  box-shadow:0 4px 0 #c9607a;
+  box-shadow:0 4px 0 #b84a74;
   transition:.2s;
 }
 
@@ -92,7 +92,9 @@ img{max-width:100%}
   line-height:0;
 }
 
+.hero{overflow:hidden}
 .hero .bg{
+  margin-top:-6.8%;
   display:block;
   width:100%;
   height:auto;
@@ -162,8 +164,8 @@ img{max-width:100%}
 .nav-lang{
   position:absolute;
   right:14px;
-  top:1.8%;
-  background:rgba(255,255,255,.8);
+  top:10px;
+  background:#fff;
   border:1.5px solid var(--pink-dark);
   border-radius:12px;
   padding:7px 12px;
@@ -269,10 +271,25 @@ img{max-width:100%}
 /* FOOD CARDS */
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  display:flex;
   gap:15px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  direction:ltr;
 }
+.grid::-webkit-scrollbar{display:none}
+.grid>.card{flex:0 0 calc((100% - 45px)/4);scroll-snap-align:start}
+.carousel{position:relative}
+.car-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:42px;height:42px;border:none;border-radius:50%;
+  background:#fff;color:#3a2a55;font-size:22px;cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.3);
+}
+.car-btn.prev{left:-6px}
+.car-btn.next{right:-6px}
 
 .card{
   background:transparent;
@@ -323,13 +340,13 @@ img{max-width:100%}
   width:29px;
   height:29px;
   border-radius:50%;
-  background:#fbd3dc;
-  color:#e25b7c;
+  background:#f7b6d2;
+  color:#e8789f;
   font-size:14px;
 }
 
 .heart[aria-pressed="true"]{
-  background:#e25b7c;
+  background:#e8789f;
   color:white;
 }
 
@@ -341,12 +358,12 @@ img{max-width:100%}
   padding:9px 5px;
   font-weight:800;
   font-size:13px;
-  box-shadow:0 3px 0 #c9607a;
+  box-shadow:0 3px 0 #b84a74;
 }
 
 .add.done{
-  background:#6bb58a;
-  box-shadow:0 3px 0 #4a8f68;
+  background:#e8789f;
+  box-shadow:0 3px 0 #b84a74;
 }
 
 .empty{
@@ -383,7 +400,7 @@ img{max-width:100%}
 }
 
 .chip{
-  background:#fdeef2;
+  background:#fff1d6;
   color:var(--ink);
   border:2px solid transparent;
   border-radius:16px;
@@ -402,7 +419,7 @@ img{max-width:100%}
 .chip[aria-pressed="true"]{
   background:var(--pink-dark);
   color:white;
-  border-color:#c9607a;
+  border-color:#b84a74;
 }
 
 .step{
@@ -418,7 +435,7 @@ img{max-width:100%}
   background:var(--pink-dark);
   color:white;
   font-size:23px;
-  box-shadow:0 3px 0 #c9607a;
+  box-shadow:0 3px 0 #b84a74;
 }
 
 .step output{
@@ -550,7 +567,7 @@ img{max-width:100%}
 
 .ft b{
   display:block;
-  font-family:'Fredoka','Amiri',sans-serif;
+  font-family:'Sitka Small','Sitka Text',Sitka,Georgia,'Amiri',serif;
   font-size:10.5px;
 }
 
@@ -560,7 +577,26 @@ img{max-width:100%}
   line-height:1.4;
 }
 
+/* MENU AWNING */
+.awning{margin:0 0 22px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
+.awning .roof{height:26px;background:linear-gradient(#b3262e,#8f1d24);border-radius:12px 12px 0 0;box-shadow:inset 0 -4px 6px rgba(0,0,0,.25)}
+.awning .val{position:relative;background:#fbeedd;padding:14px 10px 22px;text-align:center;display:flex;align-items:center;justify-content:center;gap:14px}
+.awning .val::after{content:"";position:absolute;left:0;right:0;bottom:-14px;height:14px;background:radial-gradient(circle at 50% 0,#fbeedd 13px,transparent 14px) 0 0/28px 14px repeat-x}
+.awning .val::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 55px,rgba(120,60,40,.12) 55px 56px);pointer-events:none}
+.awning h2{margin:0;font-family:'Baloo 2','Fredoka',cursive,sans-serif;font-size:clamp(34px,8vw,56px);color:#3b2318;letter-spacing:1px;line-height:1.1}
+.awning .fl{color:#b3262e;font-size:clamp(22px,5vw,34px)}
 /* FOOTER */
+footer{background:#fde4ee !important;color:#3a2a55;border-radius:0 !important;padding:0 0 16px !important;text-align:center}
+.fk{background:#ffefd5;padding:10px 0 0;border-bottom:8px solid #ffcba4}
+.fk-row{display:flex;gap:6px;justify-content:center;padding:0 8px}
+.fk-row b{flex:1;max-width:120px;background:#e8789f;color:#fff;font-weight:400;font-size:22px;padding:22px 0;border-bottom:6px solid #ffcba4;line-height:1.5}
+.fsign{display:inline-block;margin:26px 0 8px;background:#fff3dc;border:3px solid #f7b6d2;border-radius:12px;padding:10px 26px;color:#b84a74}
+.fsign small{display:block;letter-spacing:.3em;font-size:11px}
+.fsign em{font-family:Georgia,serif;font-size:34px;font-weight:700}
+.fnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:14px 10px}
+.fnav a{color:#fff3dc;text-decoration:none;font-size:15px}
+.fbtn{display:inline-block;margin:6px;padding:10px 22px;border-radius:30px;text-decoration:none;color:#3a2a55;font-weight:600}
+footer .tag{font-style:italic;color:#d9b8e8;margin:10px 0}
 
 footer{
   background:var(--pink-dark);
@@ -577,17 +613,20 @@ footer{
   font-size:39px;
   line-height:.95;
   color:white;
-  text-shadow:3px 4px 0 #c9607a;
+  text-shadow:3px 4px 0 #b84a74;
   margin-bottom:12px;
 }
 
 .copy{
   font-size:12px;
-  margin:12px 0 0;
-  padding-top:12px;
-  border-top:1px solid rgba(255,255,255,.35);
+  margin:4px 0 0;
 }
+footer{border-top:0 !important;padding-bottom:0 !important;padding-top:16px !important;background:#fde4ee !important;color:#3a2a55 !important}
 
+footer{position:relative !important;margin-top:60px !important;background:#e8789f !important;color:#fff !important;padding:20px 16px 28px !important}
+footer p,footer a{color:#fff !important}
+footer::before{content:'';position:absolute;left:0;right:0;top:-59px;height:60px;margin:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 34C200 0 400 62 650 30S1000 4 1200 28V60H0Z' fill='%23e8789f'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
+footer::after{content:none !important;display:none !important}
 /* CART BUTTON */
 
 #cart{
@@ -631,7 +670,7 @@ footer{
 }
 
 .x{
-  background:#fbd3dc;
+  background:#f7b6d2;
   color:var(--rose);
   width:36px;
   height:36px;
@@ -645,7 +684,7 @@ footer{
   gap:10px;
   align-items:center;
   padding:12px 0;
-  border-bottom:1px solid #f3d9df;
+  border-bottom:1px solid #f7b6d2;
 }
 
 .line b{
@@ -702,10 +741,8 @@ footer{
 
   .vid-sec{border-radius:21px}
 
-  .grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:11px;
-  }
+  .grid{gap:11px}
+  .grid>.card{flex:0 0 calc((100% - 22px)/3)}
 
   .card{padding:8px}
 
@@ -759,17 +796,10 @@ footer{
 
   <img class="bg"
        src="images/hero.jpg?v=14"
-       alt="Yummy Nam Korean Street Food">
+       alt="Yummy Nom Korean Street Food">
 
 
-  <nav class="hnav">
-    <a href="#home" data-en="Home" data-ar="الرئيسية">Home</a>
-    <a href="#menu" data-en="Menu" data-ar="القائمة">Menu</a>
-    <a href="#about" data-en="About Us" data-ar="من نحن">About Us</a>
-    <a href="#location" data-en="Location" data-ar="الموقع">Location</a>
-    <a href="#contact" data-en="Contact" data-ar="تواصل معنا">Contact</a>
-    <a href="#builder" data-en="Order Now" data-ar="اطلب الآن">Order Now</a>
-  </nav>
+  
 
   <button id="lang-btn" class="nav-lang">عربي</button>
 </header>
@@ -821,16 +851,21 @@ footer{
 
 <section class="best" id="menu">
 
-  <h2 data-en="Our Menu" data-ar="قائمتنا">Our Menu</h2>
 
-  <video class="chef" src="video.mp4" autoplay loop muted playsinline></video>
+  <div style="position:relative;margin:0 calc(50% - 50vw);width:100vw;filter:drop-shadow(0 10px 12px rgba(60,20,20,.35))"><img src="images/menu-sign-blank.jpg?v=1" alt="" style="width:100%;height:auto;display:block;clip-path:polygon(0 0,100% 0,100% 88%,95% 100%,84% 88%,73% 100%,61% 88%,50% 100%,39% 88%,27% 100%,16% 88%,5% 100%,0 88%)"><h2 data-en="Our Menu" data-ar="قائمتنا" style="position:absolute;left:25%;right:25%;top:0;bottom:12%;margin:0;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2','Fredoka',sans-serif;font-size:clamp(24px,6vw,80px);color:#3a2a55;white-space:nowrap">Our Menu</h2></div>
 
   <div class="tools">
 
 
   </div>
 
-  <div class="grid" id="grid"></div>
+  <div class="carousel">
+    <button class="car-btn prev" type="button" aria-label="Previous" onclick="var g=document.getElementById('grid');g.scrollBy({left:-g.clientWidth,behavior:'smooth'})">&#10094;</button>
+    <div class="grid" id="grid"></div>
+    <button class="car-btn next" type="button" aria-label="Next" onclick="var g=document.getElementById('grid');g.scrollBy({left:g.clientWidth,behavior:'smooth'})">&#10095;</button>
+  </div>
+
+  <video class="chef" src="video.mp4" autoplay loop muted playsinline></video>
 
   <p class="empty" id="empty" hidden
      data-en="No items found."
@@ -849,7 +884,7 @@ footer{
   <div class="grp">
 
     <h3 data-en="Choose Your Ramyun"
-        data-ar="اختاري نوع الرامن">Choose Your Ramyun</h3>
+        data-ar="اختر نوع الرامن">Choose Your Ramyun</h3>
 
     <div class="chips" id="types"></div>
 
@@ -901,6 +936,7 @@ footer{
      alt="Korean street food market">
 
 
+
 <!-- ABOUT -->
 
 <section class="about" id="about">
@@ -925,20 +961,9 @@ footer{
 <!-- FOOTER -->
 
 <footer id="location">
-
-  <a class="logo" href="#home">Yummy<br>Nam</a>
-
-  <p data-en="Thank you for choosing Yummy Nam"
-     data-ar="شكراً لاختياركم يومي نام">
-     Thank you for choosing Yummy Nam
-  </p>
-
-  <p class="copy" id="contact"
-     data-en="© 2026 Yummy Nam. All rights reserved."
-     data-ar="© 2026 يومي نام. جميع الحقوق محفوظة.">
-     © 2026 Yummy Nam. All rights reserved.
-  </p>
-
+  <p data-en="Thank you for trusting us" data-ar="شكراً لثقتكم فينا" style="margin:0 0 4px;font-style:italic;font-size:20px">Thank you for trusting us</p>
+  <p class="copy" id="contact" data-en="© 2026 Yummy Nom. All rights reserved." data-ar="© 2026 يامي نوم. جميع الحقوق محفوظة.">© 2026 Yummy Nom. All rights reserved.</p>
+  <p class="copy" data-en="Made by web.line3" data-ar="صنع من قبل web.line3">Made by web.line3</p>
 </footer>
 
 </div>
@@ -973,7 +998,7 @@ footer{
 
   <input id="cname" type="text" maxlength="40" autocomplete="name"
          placeholder="Your name / اسمك"
-         style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f3b9c8;border-radius:12px;font:inherit;font-size:16px;background:#fff">
+         style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f7b6d2;border-radius:12px;font:inherit;font-size:16px;background:#fff">
 
   <button class="btn" id="place" style="width:100%"
           data-en="Order via WhatsApp"
@@ -1024,7 +1049,7 @@ var $=function(id){
 };
 
 var fmt=function(n){
- return n+' AED';
+ return currentLang==='ar'?n+' درهم':n+' AED';
 };
 
 function tr(en,ar){
@@ -1084,7 +1109,7 @@ function renderMenu(){
    <div class="pr">${fmt(m.price)}</div>
 
    <button class="add">
-    ${m.cat==='ramyun'?tr('Customize','تخصيص'):tr('Add to Cart','أضف للسلة')}
+    ${m.cat==='ramyun'?tr('Customize','تخصيص'):tr('Add to Cart','أضف إلى السلة')}
    </button>
   `;
 
@@ -1122,7 +1147,7 @@ function renderMenu(){
 
      add.classList.remove('done');
 
-     add.textContent=tr('Add to Cart','أضف للسلة');
+     add.textContent=tr('Add to Cart','أضف إلى السلة');
 
     },1200);
 
