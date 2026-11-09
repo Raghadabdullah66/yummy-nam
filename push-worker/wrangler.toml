@@ -1,0 +1,14 @@
+name = "yummy-nom-push"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+[vars]
+VAPID_PUBLIC_KEY = "BCVV8_M088T9Ug2C6HoL6J0OCYhgIhwnqd4roixClyd9cF8gujqiMfKJGiC4jibIMrlBj5oIdDgGQmJewmaA2UE"
+VAPID_SUBJECT = "mailto:raghadabdullah66@users.noreply.github.com"
+
+[[kv_namespaces]]
+binding = "REMINDERS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[triggers]
+crons = ["* * * * *"]

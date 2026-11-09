@@ -783,6 +783,18 @@ footer::after{content:none !important;display:none !important}
   .feats{flex-direction:row}
   .chip{padding:8px 11px}
 }
+.order-ok{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;opacity:0;transition:opacity .3s}
+.order-ok.show{opacity:1}
+.order-ok[hidden]{display:none}
+.order-ok-card{background:#fff;border-radius:20px;padding:28px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.order-ok-check{display:block;width:96px;height:96px;margin:0 auto 12px}
+.order-ok-check circle{stroke:#22c55e;stroke-width:3;stroke-dasharray:151;stroke-dashoffset:151;animation:okRing .7s ease forwards}
+.order-ok-check path{fill:none;stroke:#22c55e;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:32;stroke-dashoffset:32;animation:okTick .45s .6s ease forwards}
+@keyframes okRing{to{stroke-dashoffset:0}}
+@keyframes okTick{to{stroke-dashoffset:0}}
+.order-ok-msg{font-size:16px;line-height:1.5;margin:0 0 8px}
+.order-ok-no{font-weight:700;margin:0 0 16px;color:#555}
+@media (prefers-reduced-motion:reduce){.order-ok-check circle,.order-ok-check path{animation:none;stroke-dashoffset:0}}
 </style>
 </head>
 
@@ -1000,6 +1012,11 @@ footer::after{content:none !important;display:none !important}
          placeholder="Your name / اسمك"
          style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f7b6d2;border-radius:12px;font:inherit;font-size:16px;background:#fff">
 
+  <input id="cphone" type="tel" maxlength="20" autocomplete="tel-national"
+         inputmode="tel"
+         placeholder="Phone number / رقم الجوال"
+         style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f7b6d2;border-radius:12px;font:inherit;font-size:16px;background:#fff">
+
   <button class="btn" id="place" style="width:100%"
           data-en="Checkout"
           data-ar="اتمام الطلب">
@@ -1008,7 +1025,22 @@ footer::after{content:none !important;display:none !important}
 
 </aside>
 
+<!-- ORDER SUCCESS -->
 
+<div id="order-ok" class="order-ok" hidden role="dialog" aria-live="polite" aria-label="Order placed">
+  <div class="order-ok-card">
+    <svg class="order-ok-check" viewBox="0 0 52 52" aria-hidden="true">
+      <circle class="ring" cx="26" cy="26" r="24"/>
+      <path class="tick" d="M15 27 l7 7 l15 -16"/>
+    </svg>
+    <p class="order-ok-msg">Your order has been placed successfully! Thank you for choosing Yummy Nam.</p>
+    <p class="order-ok-no" id="order-ok-no"></p>
+    <button class="btn" id="order-ok-close" type="button">OK</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
 
 /* MENU DATA */
@@ -1336,29 +1368,64 @@ $('addb').onclick=function(){
 
 /* CART */
 
-var REMINDER_DELAY_MS=60000,reminderTimer=null;
+var PUSH_API='https://yummy-nom-push.YOUR-SUBDOMAIN.workers.dev';
+var REMINDER_DELAY_MIN=1;
+var orderSent=false,pushReady=null;
+
+function urlB64ToBytes(b64){
+ var pad='='.repeat((4-b64.length%4)%4);
+ var raw=atob((b64+pad).replace(/-/g,'+').replace(/_/g,'/'));
+ return Uint8Array.from(raw,function(c){return c.charCodeAt(0)});
+}
+
+function ensurePushSubscription(){
+ if(pushReady)return pushReady;
+ if(!('serviceWorker' in navigator)||!('PushManager' in window))return Promise.resolve(null);
+ pushReady=navigator.serviceWorker.register('sw.js').then(function(reg){
+  return reg.pushManager.getSubscription().then(function(sub){
+   if(sub)return sub;
+   return fetch(PUSH_API+'/vapid-public-key').then(function(r){return r.json()}).then(function(d){
+    return reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlB64ToBytes(d.key)});
+   });
+  });
+ }).catch(function(){pushReady=null;return null});
+ return pushReady;
+}
 
 function askNotifPermission(){
- if('Notification' in window && Notification.permission==='default'){
-  Notification.requestPermission();
- }
+ if(!('Notification' in window))return;
+ if(Notification.permission==='granted')ensurePushSubscription();
+ else if(Notification.permission==='default')Notification.requestPermission().then(function(p){
+  if(p==='granted')ensurePushSubscription();
+ });
+}
+
+function setReminder(cancel){
+ if(!pushReady)return;
+ pushReady.then(function(sub){
+  if(!sub)return;
+  return fetch(PUSH_API+'/reminder',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({subscription:{endpoint:sub.endpoint},cancel:cancel,delayMinutes:REMINDER_DELAY_MIN})
+  });
+ }).catch(function(){});
 }
 
 document.addEventListener('visibilitychange',function(){
- clearTimeout(reminderTimer);
- if(document.hidden && cart.length && 'Notification' in window && Notification.permission==='granted'){
-  reminderTimer=setTimeout(function(){
-   new Notification('Yummy Nom',{
-    body:'عندك طلب بالسلة لم يكتمل 🍜 / You still have items in your cart',
-    tag:'cart-reminder'
-   });
-  },REMINDER_DELAY_MS);
+ if(document.hidden){
+  if(cart.length&&!orderSent)setReminder(false);
+ }else{
+  setReminder(true);
  }
 });
+
+if('Notification' in window&&Notification.permission==='granted')ensurePushSubscription();
 
 function addLine(id,detail,price,qty){
 
  askNotifPermission();
+ orderSent=false;
 
  var key=id+'-'+detail;
 
@@ -1502,58 +1569,127 @@ $('pclose').onclick=function(){
 };
 
 
-/* WHATSAPP ORDER */
+/* ORDER (saved to Supabase through place_order RPC) */
 
-var WHATSAPP_NUMBER='971544200707';
+var ORDER_NOT_CONFIGURED='Order system is not configured yet.';
+var sbClient=null;
+var orderPending=false;
+var pendingRequest=null;
 
-$('place').onclick=function(){
+function getSupabase(){
+ if(sbClient)return sbClient;
+ var cfg=window.YUMMY_SUPABASE;
+ if(!window.supabase||!cfg||cfg.url.indexOf('YOUR-')!==-1)return null;
+ sbClient=window.supabase.createClient(cfg.url,cfg.anonKey);
+ return sbClient;
+}
 
- if(!cart.length)return;
+function newRequestId(){
+ if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
+ return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
+  var r=Math.random()*16|0;
+  return (c==='x'?r:(r&3|8)).toString(16);
+ });
+}
 
- var nameEl=$('cname'),custName=nameEl.value.trim();
- if(!custName){
-  nameEl.style.borderColor='#e11d48';
-  nameEl.focus();
+function showOrderSuccess(orderNumber){
+ var o=$('order-ok');
+ $('order-ok-no').textContent='#'+orderNumber;
+ o.hidden=false;
+ requestAnimationFrame(function(){o.classList.add('show');});
+}
+
+$('order-ok-close').onclick=function(){
+ var o=$('order-ok');
+ o.classList.remove('show');
+ o.hidden=true;
+};
+
+function orderErrorText(err){
+ var msg=(err&&err.message)||'';
+ if(msg.indexOf('RATE_LIMITED')!==-1)
+  return tr('Too many orders from this number. Please try again later.',
+            'عدد الطلبات من هذا الرقم كبير. حاول لاحقاً.');
+ if(msg.indexOf('INVALID_PHONE')!==-1)
+  return tr('Please enter a valid phone number.','الرجاء إدخال رقم جوال صحيح.');
+ if(msg.indexOf('INVALID_NAME')!==-1)
+  return tr('Please enter your name.','الرجاء إدخال الاسم.');
+ if(msg===ORDER_NOT_CONFIGURED)
+  return tr(ORDER_NOT_CONFIGURED,'نظام الطلبات غير مُعد بعد.');
+ return tr('Sorry, your order could not be saved. Please try again.',
+           'عذراً، تعذر حفظ طلبك. حاول مرة أخرى.');
+}
+
+$('place').onclick=async function(){
+
+ if(!cart.length||orderPending)return;
+
+ var nameEl=$('cname'),phoneEl=$('cphone');
+ var custName=nameEl.value.trim();
+ var custPhone=phoneEl.value.replace(/[\s\-()]/g,'');
+
+ var nameOk=custName.length>=2&&custName.length<=40;
+ var phoneOk=/^\+?[0-9]{7,15}$/.test(custPhone);
+ nameEl.style.borderColor=nameOk?'#f7b6d2':'#e11d48';
+ phoneEl.style.borderColor=phoneOk?'#f7b6d2':'#e11d48';
+ if(!nameOk){nameEl.focus();return;}
+ if(!phoneOk){phoneEl.focus();return;}
+
+ var items=cart.map(function(l){
+  return {id:l.id,spice:l.detail||null,qty:l.qty};
+ });
+
+ var key=JSON.stringify([custName,custPhone,items]);
+ if(!pendingRequest||pendingRequest.key!==key)
+  pendingRequest={key:key,id:newRequestId()};
+
+ var sb=getSupabase();
+ if(!sb){
+  alert(orderErrorText(new Error(ORDER_NOT_CONFIGURED)));
   return;
  }
 
- var total=cart.reduce(function(sum,l){
+ var btn=$('place');
+ orderPending=true;
+ btn.disabled=true;
+ btn.textContent=tr('Sending...','جارٍ الإرسال...');
 
-  return sum+l.price*l.qty;
+ try{
 
- },0);
+  var res=await sb.rpc('place_order',{
+   p_request_id:pendingRequest.id,
+   p_name:custName,
+   p_phone:custPhone,
+   p_items:items
+  });
+  if(res.error)throw res.error;
 
- var lines=cart.map(function(l){
+  var orderNo=res.data&&res.data.order_number;
+  if(!orderNo)throw new Error('no order number');
 
-  var m=byId(l.id);
+  pendingRequest=null;
+  orderSent=true;
+  setReminder(true);
 
-  var spice=l.detail
-   ?(currentLang==='ar'
-      ?SPICE.find(s=>s[0]===l.detail)[1]
-      :l.detail)
-   :'';
+  cart=[];
+  nameEl.value='';
+  phoneEl.value='';
+  $('panel').hidden=true;
+  renderCart();
+  showOrderSuccess(orderNo);
 
-  return itemName(m)+
-   (spice?' - '+spice:'')+
-   ' × '+l.qty+
-   ' = '+fmt(l.qty*l.price);
+ }catch(err){
 
- });
+  console.error(err);
+  alert(orderErrorText(err));
 
- var message=
-  tr('Hello, I would like to place an order:',
-     'مرحباً، أود تقديم الطلب التالي:')+
-  '\n'+
-  tr('Name: ','الاسم: ')+custName+
-  '\n\n'+
-  lines.join('\n')+
-  '\n\n'+
-  tr('Total: ','الإجمالي: ')+fmt(total);
+ }finally{
 
- var url='https://wa.me/'+WHATSAPP_NUMBER+
-  '?text='+encodeURIComponent(message);
+  orderPending=false;
+  btn.disabled=false;
+  btn.textContent=tr('Checkout','اتمام الطلب');
 
- window.open(url,'_blank');
+ }
 
 };
 
