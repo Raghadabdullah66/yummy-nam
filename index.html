@@ -1001,9 +1001,9 @@ footer::after{content:none !important;display:none !important}
          style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f7b6d2;border-radius:12px;font:inherit;font-size:16px;background:#fff">
 
   <button class="btn" id="place" style="width:100%"
-          data-en="Order via WhatsApp"
-          data-ar="إرسال الطلب عبر واتساب">
-    Order via WhatsApp
+          data-en="Checkout"
+          data-ar="اتمام الطلب">
+    Checkout
   </button>
 
 </aside>
@@ -1336,7 +1336,29 @@ $('addb').onclick=function(){
 
 /* CART */
 
+var REMINDER_DELAY_MS=60000,reminderTimer=null;
+
+function askNotifPermission(){
+ if('Notification' in window && Notification.permission==='default'){
+  Notification.requestPermission();
+ }
+}
+
+document.addEventListener('visibilitychange',function(){
+ clearTimeout(reminderTimer);
+ if(document.hidden && cart.length && 'Notification' in window && Notification.permission==='granted'){
+  reminderTimer=setTimeout(function(){
+   new Notification('Yummy Nom',{
+    body:'عندك طلب بالسلة لم يكتمل 🍜 / You still have items in your cart',
+    tag:'cart-reminder'
+   });
+  },REMINDER_DELAY_MS);
+ }
+});
+
 function addLine(id,detail,price,qty){
+
+ askNotifPermission();
 
  var key=id+'-'+detail;
 
