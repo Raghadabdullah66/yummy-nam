@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yummy Nam | Korean Street Food</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#fdf3e7;
+  --pink:#f4b3c2;
+  --pink-dark:#e8869b;
+  --panel:#f9cfd9;
+  --text:#4a2a33;
+  --ink:#5b2433;
+  --rose:#c9506a;
+  --white:#fff;
+  --shadow:0 5px 16px rgba(150,70,90,.12);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--text);
+  font-family:'Nunito',sans-serif;
+  line-height:1.6;
+}
+
+html[lang="ar"] body{
+  font-family:'Amiri',serif;
+}
+
+.page{
+  max-width:850px;
+  margin:auto;
+  background:var(--cream);
+  overflow:hidden;
+}
+
+h1,h2,h3{
+  font-family:'Fredoka','Amiri',sans-serif;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3{
+  font-family:'Amiri',sans-serif;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+  border:0;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+img{max-width:100%}
+
+[hidden]{display:none!important}
+
+/* BUTTONS */
+
+.btn{
+  background:linear-gradient(135deg,#f0a0b2,#e47f97);
+  color:white;
+  font-weight:800;
+  border-radius:30px;
+  padding:12px 25px;
+  box-shadow:0 4px 0 #c9607a;
+  transition:.2s;
+}
+
+.btn:hover{transform:translateY(-2px)}
+
+.btn:active{transform:translateY(1px)}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  width:100%;
+  line-height:0;
+}
+
+.hero .bg{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.hero a.h{
+  position:absolute;
+  display:block;
+  border-radius:30px;
+  z-index:3;
+}
+
+/* Cat positioning */
+
+.hero .glow{
+  position:absolute;
+  left:33%;
+  width:34%;
+  top:60%;
+  height:32%;
+  background:radial-gradient(
+    ellipse,
+    rgba(246,222,224,.8) 40%,
+    transparent 75%
+  );
+  pointer-events:none;
+}
+
+.hero .hero-vid{
+  position:absolute;
+  left:50%;
+  top:58%;
+  transform:translateX(-50%);
+  width:44%;
+  height:auto;
+  aspect-ratio:640/352;
+  object-fit:cover;
+  mix-blend-mode:multiply;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 55%,transparent 72%);
+  mask-image:radial-gradient(ellipse at center,#000 55%,transparent 72%);
+  z-index:2;
+  pointer-events:none;
+}
+
+.hero .hnav{
+  position:absolute;
+  top:2.5%;
+  left:0;
+  right:0;
+  z-index:5;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:clamp(10px,3vw,34px);
+  padding:0 70px;
+  line-height:1.2;
+}
+
+.hero .hnav a{
+  color:var(--ink);
+  font-weight:800;
+  font-size:clamp(12px,1.6vw,18px);
+  text-decoration:none;
+  text-shadow:0 0 6px #fff,0 0 12px #fff;
+}
+
+.nav-lang{
+  position:absolute;
+  right:14px;
+  top:1.8%;
+  background:rgba(255,255,255,.8);
+  border:1.5px solid var(--pink-dark);
+  border-radius:12px;
+  padding:7px 12px;
+  min-width:44px;
+  color:var(--rose);
+  font-weight:800;
+  font-size:12px;
+  z-index:6;
+  line-height:1;
+  cursor:pointer;
+}
+.nav-lang:hover{
+  background:var(--pink-dark);
+  color:white;
+}
+
+.hero a.cta{
+  left:37.5%;
+  top:90%;
+  width:25%;
+  height:9.8%;
+}
+
+/* MAIN LAYOUT */
+
+.wrap{
+  padding:0 18px 25px;
+}
+
+.vid-sec{
+  border:1.5px solid var(--pink-dark);
+  border-radius:25px;
+  padding:23px 18px;
+}
+
+.best{
+  margin-top:25px;
+  padding:0 5px;
+}
+
+.best h2,
+.build h2,
+.vid-sec h2{
+  text-align:center;
+  color:var(--ink);
+  font-size:clamp(26px,5vw,34px);
+  margin:0 0 20px;
+}
+
+/* MENU */
+
+.tools{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.search{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:white;
+  border-radius:30px;
+  padding:10px 17px;
+  box-shadow:var(--shadow);
+}
+
+.search span{font-size:18px}
+
+.search input{
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:none;
+  font:inherit;
+  font-size:15px;
+  color:var(--text);
+}
+
+.tabs{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.tab{
+  background:white;
+  color:var(--ink);
+  border-radius:30px;
+  padding:9px 21px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.tab[aria-pressed="true"]{
+  background:var(--pink-dark);
+  color:white;
+}
+
+/* FOOD CARDS */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;
+}
+
+.card{
+  background:transparent;
+  border-radius:19px;
+  padding:10px;
+  box-shadow:none;
+  overflow:hidden;
+  transition:transform .2s;
+}
+
+.card:hover{transform:translateY(-3px)}
+
+.card img{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  border-radius:14px;
+  background:transparent;
+}
+
+.card .row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:5px;
+  margin-top:10px;
+  min-height:35px;
+}
+
+.card h3{
+  margin:0;
+  font-size:15px;
+  line-height:1.35;
+  color:var(--ink);
+}
+
+.card .pr{
+  font-family:'Fredoka',sans-serif;
+  font-weight:700;
+  color:var(--rose);
+  font-size:16px;
+  margin:7px 0 10px;
+}
+
+.heart{
+  flex:none;
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  background:#fbd3dc;
+  color:#e25b7c;
+  font-size:14px;
+}
+
+.heart[aria-pressed="true"]{
+  background:#e25b7c;
+  color:white;
+}
+
+.add{
+  width:100%;
+  border-radius:20px;
+  background:var(--pink-dark);
+  color:white;
+  padding:9px 5px;
+  font-weight:800;
+  font-size:13px;
+  box-shadow:0 3px 0 #c9607a;
+}
+
+.add.done{
+  background:#6bb58a;
+  box-shadow:0 3px 0 #4a8f68;
+}
+
+.empty{
+  text-align:center;
+  color:var(--ink);
+  font-weight:800;
+  padding:15px;
+}
+
+/* BUILD RAMYUN */
+
+.build{
+  padding:24px 18px;
+}
+
+.grp{
+  background:transparent;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:13px;
+  box-shadow:none;
+}
+
+.grp h3{
+  margin:0 0 13px;
+  color:var(--ink);
+  font-size:18px;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.chip{
+  background:#fdeef2;
+  color:var(--ink);
+  border:2px solid transparent;
+  border-radius:16px;
+  padding:9px 16px;
+  font-weight:800;
+  min-width:85px;
+  transition:.2s;
+}
+
+.chip small{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+}
+
+.chip[aria-pressed="true"]{
+  background:var(--pink-dark);
+  color:white;
+  border-color:#c9607a;
+}
+
+.step{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.step button{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:var(--pink-dark);
+  color:white;
+  font-size:23px;
+  box-shadow:0 3px 0 #c9607a;
+}
+
+.step output{
+  min-width:25px;
+  text-align:center;
+  font-family:'Fredoka';
+  font-size:23px;
+  font-weight:700;
+}
+
+.sum{
+  background:transparent;
+  border-radius:18px;
+  padding:15px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.sum span{
+  color:var(--ink);
+  font-weight:800;
+  font-size:15px;
+}
+
+/* VIDEO */
+
+.vid-sec{
+  text-align:center;
+}
+
+.vid-box{
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:18px;
+  background:white;
+  box-shadow:var(--shadow);
+}
+
+.cat-vid{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* MARKET IMAGE */
+
+.mk{
+  display:block;
+  width:100%;
+  margin-top:25px;
+  border-radius:25px;
+  box-shadow:var(--shadow);
+}
+
+/* ABOUT */
+
+.about{
+  display:grid;
+  grid-template-columns:1fr;
+  text-align:center;
+  justify-items:center;
+  align-items:center;
+  gap:10px;
+  padding:30px 5px;
+}
+
+.chef{
+  display:block;
+  width:100%;
+  max-width:220px;
+  margin:0 auto;
+  height:auto;
+  object-fit:contain;
+  mix-blend-mode:multiply;
+}
+
+.about h2{
+  color:var(--ink);
+  font-size:28px;
+  margin:0 0 8px;
+}
+
+.about p{
+  margin:0 0 17px;
+  font-size:15px;
+  line-height:1.8;
+}
+
+.feats{
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:center;
+  gap:8px 12px;
+  padding:10px 5px 0;
+}
+
+.feats .ft{
+  flex:0 1 auto;
+  min-width:0;
+  gap:4px;
+  flex-direction:column;
+  text-align:center;
+}
+
+.feats .ft small{display:none}
+
+.feats .ft b{font-size:9.5px;white-space:nowrap}
+
+.ft{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.ft span{
+  flex:none;
+  width:20px;
+  height:20px;
+  background:none;
+  display:grid;
+  place-items:center;
+  font-size:16px;
+}
+
+.ft b{
+  display:block;
+  font-family:'Fredoka','Amiri',sans-serif;
+  font-size:10.5px;
+}
+
+.ft small{
+  display:block;
+  font-size:9px;
+  line-height:1.4;
+}
+
+/* FOOTER */
+
+footer{
+  background:var(--pink-dark);
+  color:white;
+  border-radius:30px 30px 0 0;
+  padding:28px 20px 16px;
+  text-align:center;
+}
+
+.logo{
+  display:inline-block;
+  font-family:'Fredoka';
+  font-weight:700;
+  font-size:39px;
+  line-height:.95;
+  color:white;
+  text-shadow:3px 4px 0 #c9607a;
+  margin-bottom:12px;
+}
+
+.copy{
+  font-size:12px;
+  margin:12px 0 0;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.35);
+}
+
+/* CART BUTTON */
+
+#cart{
+  position:fixed;
+  right:16px;
+  bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  z-index:15;
+  padding:12px 20px;
+  max-width:calc(100% - 32px);
+}
+
+/* CART PANEL */
+
+.panel{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  width:min(850px,100%);
+  max-height:80vh;
+  overflow-y:auto;
+  background:white;
+  color:var(--text);
+  border-radius:25px 25px 0 0;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -8px 30px rgba(0,0,0,.2);
+  z-index:30;
+}
+
+.panel header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.panel h2{
+  margin:0;
+  color:var(--ink);
+  font-size:23px;
+}
+
+.x{
+  background:#fbd3dc;
+  color:var(--rose);
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+.line{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #f3d9df;
+}
+
+.line b{
+  font-family:'Fredoka';
+  font-weight:600;
+}
+
+.line small{
+  display:block;
+  font-size:12px;
+}
+
+.q{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.q button{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--pink-dark);
+  color:white;
+  font-size:16px;
+}
+
+.tot{
+  display:flex;
+  justify-content:space-between;
+  font-family:'Fredoka';
+  font-weight:700;
+  font-size:20px;
+  margin:18px 0;
+  color:var(--ink);
+}
+
+.msg{
+  text-align:center;
+  color:var(--ink);
+  font-weight:800;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:650px){
+
+  .wrap{padding:0 12px 20px}
+
+  .best,.build,.vid-sec{
+    margin-top:17px;
+    padding:18px 12px;
+  }
+
+  .vid-sec{border-radius:21px}
+
+  .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:11px;
+  }
+
+  .card{padding:8px}
+
+  .card h3{font-size:13px}
+
+  .card .pr{font-size:14px}
+
+  .about{
+    grid-template-columns:1fr;
+    text-align:center;
+    gap:5px;
+    padding:20px 5px;
+  }
+
+  .chef{
+    width:200px;
+    margin:0 auto;
+  }
+
+  .about h2{margin-top:5px}
+
+  .feats{
+    text-align:center;
+    gap:8px 12px;
+  }
+
+  .sum{justify-content:center;text-align:center}
+
+  .sum span{width:100%}
+
+  .nav-lang{
+    min-width:38px;
+    padding:6px 8px;
+  }
+}
+
+@media(max-width:370px){
+  .feats{flex-direction:row}
+  .chip{padding:8px 11px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<!-- HERO -->
+
+<header class="hero" id="home">
+
+  <img class="bg"
+       src="images/hero.jpg?v=14"
+       alt="Yummy Nam Korean Street Food">
+
+
+  <nav class="hnav">
+    <a href="#home" data-en="Home" data-ar="الرئيسية">Home</a>
+    <a href="#menu" data-en="Menu" data-ar="القائمة">Menu</a>
+    <a href="#about" data-en="About Us" data-ar="من نحن">About Us</a>
+    <a href="#location" data-en="Location" data-ar="الموقع">Location</a>
+    <a href="#contact" data-en="Contact" data-ar="تواصل معنا">Contact</a>
+    <a href="#builder" data-en="Order Now" data-ar="اطلب الآن">Order Now</a>
+  </nav>
+
+  <button id="lang-btn" class="nav-lang">عربي</button>
+</header>
+
+
+<main class="wrap">
+
+<div class="feats">
+
+  <div class="ft">
+    <span>🍜</span>
+    <div>
+      <b data-en="Fresh & Tasty" data-ar="طازج ولذيذ">Fresh & Tasty</b>
+      <small data-en="Quality ingredients and great taste."
+             data-ar="مكونات مميزة ومذاق رائع.">Quality ingredients and great taste.</small>
+    </div>
+  </div>
+
+  <div class="ft">
+    <span>❤️</span>
+    <div>
+      <b data-en="Made with Love" data-ar="محضر بحب">Made with Love</b>
+      <small data-en="Made with care."
+             data-ar="نحضره بكل عناية.">Made with care.</small>
+    </div>
+  </div>
+
+  <div class="ft">
+    <span>🧀</span>
+    <div>
+      <b data-en="Crispy Corn Dogs" data-ar="كورن دوغ مقرمش">Crispy Corn Dogs</b>
+      <small data-en="Golden, cheesy and crunchy."
+             data-ar="ذهبي وجبني ومقرمش.">Golden, cheesy and crunchy.</small>
+    </div>
+  </div>
+
+  <div class="ft">
+    <span>🔥</span>
+    <div>
+      <b data-en="Spicy Your Way" data-ar="حار على ذوقك">Spicy Your Way</b>
+      <small data-en="Choose your spice level."
+             data-ar="اختر مستوى الحرارة.">Choose your spice level.</small>
+    </div>
+  </div>
+
+</div>
+
+<!-- MENU -->
+
+<section class="best" id="menu">
+
+  <h2 data-en="Our Menu" data-ar="قائمتنا">Our Menu</h2>
+
+  <video class="chef" src="video.mp4" autoplay loop muted playsinline></video>
+
+  <div class="tools">
+
+
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="empty" id="empty" hidden
+     data-en="No items found."
+     data-ar="لم يتم العثور على أصناف.">No items found.</p>
+
+</section>
+
+
+<!-- CUSTOMIZE -->
+
+<section class="build" id="builder">
+
+  <h2 data-en="Build Your Ramyun"
+      data-ar="خصص طبق الرامن الخاص بك">Build Your Ramyun</h2>
+
+  <div class="grp">
+
+    <h3 data-en="Choose Your Ramyun"
+        data-ar="اختاري نوع الرامن">Choose Your Ramyun</h3>
+
+    <div class="chips" id="types"></div>
+
+  </div>
+
+  <div class="grp">
+
+    <h3 data-en="Spice Level"
+        data-ar="مستوى الحرارة">Spice Level</h3>
+
+    <div class="chips" id="spice"></div>
+
+  </div>
+
+  <div class="grp">
+
+    <h3 data-en="Quantity"
+        data-ar="الكمية">Quantity</h3>
+
+    <div class="step">
+
+      <button id="qm" aria-label="Decrease">−</button>
+
+      <output id="qv">1</output>
+
+      <button id="qp" aria-label="Increase">+</button>
+
+    </div>
+
+  </div>
+
+  <div class="sum">
+
+    <span id="sumtxt"></span>
+
+    <button class="btn" id="addb"
+            data-en="Add to Cart"
+            data-ar="أضف إلى السلة">Add to Cart</button>
+
+  </div>
+
+</section>
+
+
+<!-- MARKET -->
+
+<img class="mk"
+     src="images/market.jpg?v=2"
+     alt="Korean street food market">
+
+
+<!-- ABOUT -->
+
+<section class="about" id="about">
+
+  <div>
+
+    <h2 data-en="About Us" data-ar="من نحن">About Us</h2>
+
+    <p
+      data-en="Inspired by our passion for Korean cuisine, we bring you an experience that combines distinctive flavors and delicious details, and the love we put into every dish. We make sure every visit is full of great taste and happy moments, because we don't just serve food, we share our passion for Korean flavors."
+      data-ar="استوحينا شغفنا من المطبخ الكوري لنقدم لكم تجربة تجمع بين النكهات المميزة والتفاصيل اللذيذة، والحب الذي نضعه في كل طبق. نهتم بأن تكون كل زيارة لنا تجربة مليئة بالطعم الجميل واللحظات السعيدة، لأننا لا نقدم لكم مجرد طعام، بل نشارككم شغفنا بالنكهات الكورية.">
+      Inspired by our passion for Korean cuisine, we bring you an experience that combines distinctive flavors and delicious details, and the love we put into every dish. We make sure every visit is full of great taste and happy moments, because we don't just serve food, we share our passion for Korean flavors.
+    </p>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer id="location">
+
+  <a class="logo" href="#home">Yummy<br>Nam</a>
+
+  <p data-en="Thank you for choosing Yummy Nam"
+     data-ar="شكراً لاختياركم يومي نام">
+     Thank you for choosing Yummy Nam
+  </p>
+
+  <p class="copy" id="contact"
+     data-en="© 2026 Yummy Nam. All rights reserved."
+     data-ar="© 2026 يومي نام. جميع الحقوق محفوظة.">
+     © 2026 Yummy Nam. All rights reserved.
+  </p>
+
+</footer>
+
+</div>
+
+
+<!-- CART BUTTON -->
+
+<button class="btn" id="cart" hidden></button>
+
+
+<!-- CART PANEL -->
+
+<aside class="panel" id="panel" hidden role="dialog" aria-label="Shopping cart">
+
+  <header>
+
+    <h2 data-en="Your Cart" data-ar="سلتك">Your Cart</h2>
+
+    <button class="x" id="pclose">✕</button>
+
+  </header>
+
+  <div id="plist"></div>
+
+  <div class="tot">
+
+    <span data-en="Total" data-ar="الإجمالي">Total</span>
+
+    <span id="ptotal">0 AED</span>
+
+  </div>
+
+  <input id="cname" type="text" maxlength="40" autocomplete="name"
+         placeholder="Your name / اسمك"
+         style="width:100%;box-sizing:border-box;padding:12px;margin:0 0 10px;border:2px solid #f3b9c8;border-radius:12px;font:inherit;font-size:16px;background:#fff">
+
+  <button class="btn" id="place" style="width:100%"
+          data-en="Order via WhatsApp"
+          data-ar="إرسال الطلب عبر واتساب">
+    Order via WhatsApp
+  </button>
+
+</aside>
+
+
+<script>
+
+/* MENU DATA */
+
+var MENU=[
+ {id:'sweet',name:'Sweet & Spicy Ramyun',nameAr:'رامن حار وحلو',cat:'ramyun',price:30,img:'images/sweet-spicy-ramyun.png?v=10'},
+
+ {id:'carbonara',name:'Carbonara Ramyun',nameAr:'رامن كاربونارا',cat:'ramyun',price:30,img:'images/carbonara-ramyun.png?v=10'},
+
+ {id:'cheese',name:'Cheese Ramyun',nameAr:'رامن بالجبنة',cat:'ramyun',price:30,img:'images/cheese-ramyun.png?v=10'},
+
+ {id:'sausage',name:'Sausage Corn Dog',nameAr:'كورن دوغ بالنقانق',cat:'corndog',price:12,img:'images/sausage-corn-dog.png?v=1'},
+
+ {id:'cheesedog',name:'Cheese Corn Dog',nameAr:'كورن دوغ بالجبنة',cat:'corndog',price:12,img:'images/cheese-corn-dog.png?v=1'}
+];
+
+var SPICE=[
+ ['Mild','خفيف','🌶'],
+ ['Medium','متوسط','🌶🌶'],
+ ['Hot','حار','🌶🌶🌶'],
+ ['Extra Hot','حار جداً','🌶🌶🌶🌶']
+];
+
+var currentLang='en';
+var cat='all';
+var fav={};
+var cart=[];
+var searchText='';
+
+var sel={
+ type:'sweet',
+ spice:1,
+ qty:1
+};
+
+var $=function(id){
+ return document.getElementById(id);
+};
+
+var fmt=function(n){
+ return n+' AED';
+};
+
+function tr(en,ar){
+ return currentLang==='ar'?ar:en;
+}
+
+function byId(id){
+ return MENU.find(function(m){
+  return m.id===id;
+ });
+}
+
+function itemName(item){
+ return currentLang==='ar'?item.nameAr:item.name;
+}
+
+
+/* RENDER MENU */
+
+function renderMenu(){
+
+ var grid=$('grid');
+
+ var list=MENU.filter(function(m){
+
+  var categoryMatch=cat==='all'||m.cat===cat;
+
+  var name=itemName(m).toLowerCase();
+
+  var searchMatch=name.includes(searchText.toLowerCase());
+
+  return categoryMatch&&searchMatch;
+
+ });
+
+ grid.innerHTML='';
+
+ list.forEach(function(m){
+
+  var d=document.createElement('article');
+
+  d.className='card';
+
+  d.innerHTML=`
+   <img src="${m.img}" alt="${itemName(m)}" loading="lazy">
+
+   <div class="row">
+
+    <h3>${itemName(m)}</h3>
+
+    <button class="heart"
+      aria-pressed="${fav[m.id]?'true':'false'}"
+      aria-label="Favorite">♥</button>
+
+   </div>
+
+   <div class="pr">${fmt(m.price)}</div>
+
+   <button class="add">
+    ${m.cat==='ramyun'?tr('Customize','تخصيص'):tr('Add to Cart','أضف للسلة')}
+   </button>
+  `;
+
+  var heart=d.querySelector('.heart');
+
+  var add=d.querySelector('.add');
+
+  heart.onclick=function(){
+
+   fav[m.id]=!fav[m.id];
+
+   heart.setAttribute('aria-pressed',fav[m.id]);
+
+  };
+
+  add.onclick=function(){
+
+   if(m.cat==='ramyun'){
+
+    sel.type=m.id;
+
+    renderBuilder();
+
+    $('builder').scrollIntoView({behavior:'smooth'});
+
+   }else{
+
+    addLine(m.id,'',m.price,1);
+
+    add.classList.add('done');
+
+    add.textContent=tr('Added ✓','تمت الإضافة ✓');
+
+    setTimeout(function(){
+
+     add.classList.remove('done');
+
+     add.textContent=tr('Add to Cart','أضف للسلة');
+
+    },1200);
+
+   }
+
+  };
+
+  grid.appendChild(d);
+
+ });
+
+ $('empty').hidden=list.length>0;
+
+}
+
+
+/* FILTER BUTTONS */
+
+document.querySelectorAll('.tab').forEach(function(t){
+
+ t.onclick=function(){
+
+  cat=t.dataset.cat;
+
+  document.querySelectorAll('.tab').forEach(function(x){
+
+   x.setAttribute('aria-pressed',x===t);
+
+  });
+
+  renderMenu();
+
+ };
+
+});
+
+
+/* SEARCH */
+
+if($('search-input'))$('search-input').addEventListener('input',function(e){
+
+ searchText=e.target.value;
+
+ renderMenu();
+
+});
+
+
+/* BUILDER */
+
+function renderBuilder(){
+
+ var types=$('types');
+
+ var spice=$('spice');
+
+ types.innerHTML='';
+
+ spice.innerHTML='';
+
+ MENU.filter(function(m){
+
+  return m.cat==='ramyun';
+
+ }).forEach(function(m){
+
+  var b=document.createElement('button');
+
+  b.className='chip';
+
+  b.setAttribute('aria-pressed',sel.type===m.id);
+
+  b.innerHTML=`
+   ${itemName(m)}
+   <small>${fmt(m.price)}</small>
+  `;
+
+  b.onclick=function(){
+
+   sel.type=m.id;
+
+   renderBuilder();
+
+  };
+
+  types.appendChild(b);
+
+ });
+
+
+ SPICE.forEach(function(s,i){
+
+  var b=document.createElement('button');
+
+  b.className='chip';
+
+  b.setAttribute('aria-pressed',sel.spice===i);
+
+  b.innerHTML=`
+   ${currentLang==='ar'?s[1]:s[0]}
+   <small>${s[2]}</small>
+  `;
+
+  b.onclick=function(){
+
+   sel.spice=i;
+
+   renderBuilder();
+
+  };
+
+  spice.appendChild(b);
+
+ });
+
+
+ var m=byId(sel.type);
+
+ $('qv').textContent=sel.qty;
+
+ $('sumtxt').textContent=
+  sel.qty+' × '+itemName(m)+' · '+
+  (currentLang==='ar'?SPICE[sel.spice][1]:SPICE[sel.spice][0])+
+  ' — '+fmt(m.price*sel.qty);
+
+}
+
+
+/* QUANTITY */
+
+$('qm').onclick=function(){
+
+ if(sel.qty>1){
+
+  sel.qty--;
+
+  renderBuilder();
+
+ }
+
+};
+
+$('qp').onclick=function(){
+
+ if(sel.qty<20){
+
+  sel.qty++;
+
+  renderBuilder();
+
+ };
+
+
+};
+
+
+/* ADD BUILDER ITEM */
+
+$('addb').onclick=function(){
+
+ var m=byId(sel.type);
+
+ addLine(
+  m.id,
+  SPICE[sel.spice][0],
+  m.price,
+  sel.qty
+ );
+
+ sel.qty=1;
+
+ renderBuilder();
+
+ var b=$('addb');
+
+ b.textContent=tr('Added ✓','تمت الإضافة ✓');
+
+ setTimeout(function(){
+
+  b.textContent=tr('Add to Cart','أضف إلى السلة');
+
+ },1200);
+
+};
+
+
+/* CART */
+
+function addLine(id,detail,price,qty){
+
+ var key=id+'-'+detail;
+
+ var line=cart.find(function(x){
+
+  return x.key===key;
+
+ });
+
+ if(line){
+
+  line.qty+=qty;
+
+ }else{
+
+  cart.push({
+   key:key,
+   id:id,
+   detail:detail,
+   price:price,
+   qty:qty
+  });
+
+ }
+
+ renderCart();
+
+}
+
+
+function renderCart(){
+
+ var list=$('plist');
+
+ list.innerHTML='';
+
+ var count=0;
+
+ var total=0;
+
+ cart.forEach(function(l){
+
+  var m=byId(l.id);
+
+  var name=itemName(m);
+
+  count+=l.qty;
+
+  total+=l.qty*l.price;
+
+  var d=document.createElement('div');
+
+  d.className='line';
+
+  d.innerHTML=`
+   <div>
+    <b>${name}</b>
+    ${l.detail?'<small>'+ (currentLang==='ar'?SPICE.find(s=>s[0]===l.detail)[1]:l.detail) +'</small>':''}
+   </div>
+
+   <div class="q">
+
+    <button data-key="${l.key}" data-change="-1">−</button>
+
+    ${l.qty}
+
+    <button data-key="${l.key}" data-change="1">+</button>
+
+   </div>
+
+   <b>${fmt(l.qty*l.price)}</b>
+  `;
+
+  list.appendChild(d);
+
+ });
+
+ if(!cart.length){
+
+  list.innerHTML='<p class="msg">'+
+   tr('Your cart is empty.','سلتك فارغة.')+
+   '</p>';
+
+ }
+
+ $('ptotal').textContent=fmt(total);
+
+ $('cart').hidden=count===0;
+
+ $('cart').textContent=
+  tr('Cart','السلة')+' ('+count+') · '+fmt(total);
+
+}
+
+
+/* CART QUANTITY */
+
+$('plist').onclick=function(e){
+
+ var b=e.target.closest('button[data-key]');
+
+ if(!b)return;
+
+ var line=cart.find(function(x){
+
+  return x.key===b.dataset.key;
+
+ });
+
+ if(!line)return;
+
+ line.qty+=Number(b.dataset.change);
+
+ if(line.qty<=0){
+
+  cart=cart.filter(function(x){
+
+   return x.key!==line.key;
+
+  });
+
+ }
+
+ renderCart();
+
+};
+
+
+/* OPEN AND CLOSE CART */
+
+$('cart').onclick=function(){
+
+ $('panel').hidden=false;
+
+};
+
+$('pclose').onclick=function(){
+
+ $('panel').hidden=true;
+
+};
+
+
+/* WHATSAPP ORDER */
+
+var WHATSAPP_NUMBER='971544200707';
+
+$('place').onclick=function(){
+
+ if(!cart.length)return;
+
+ var nameEl=$('cname'),custName=nameEl.value.trim();
+ if(!custName){
+  nameEl.style.borderColor='#e11d48';
+  nameEl.focus();
+  return;
+ }
+
+ var total=cart.reduce(function(sum,l){
+
+  return sum+l.price*l.qty;
+
+ },0);
+
+ var lines=cart.map(function(l){
+
+  var m=byId(l.id);
+
+  var spice=l.detail
+   ?(currentLang==='ar'
+      ?SPICE.find(s=>s[0]===l.detail)[1]
+      :l.detail)
+   :'';
+
+  return itemName(m)+
+   (spice?' - '+spice:'')+
+   ' × '+l.qty+
+   ' = '+fmt(l.qty*l.price);
+
+ });
+
+ var message=
+  tr('Hello, I would like to place an order:',
+     'مرحباً، أود تقديم الطلب التالي:')+
+  '\n'+
+  tr('Name: ','الاسم: ')+custName+
+  '\n\n'+
+  lines.join('\n')+
+  '\n\n'+
+  tr('Total: ','الإجمالي: ')+fmt(total);
+
+ var url='https://wa.me/'+WHATSAPP_NUMBER+
+  '?text='+encodeURIComponent(message);
+
+ window.open(url,'_blank');
+
+};
+
+
+/* LANGUAGE */
+
+$('lang-btn').onclick=function(){
+
+ currentLang=currentLang==='en'?'ar':'en';
+
+ $('html-root').lang=currentLang;
+
+ $('html-root').dir=currentLang==='ar'?'rtl':'ltr';
+
+ document.querySelectorAll('[data-en]').forEach(function(el){
+
+  el.textContent=currentLang==='ar'
+   ?el.dataset.ar
+   :el.dataset.en;
+
+ });
+
+ $('lang-btn').textContent=
+  currentLang==='ar'?'EN':'عربي';
+
+
+ renderMenu();
+
+ renderBuilder();
+
+ renderCart();
+
+};
+
+
+/* INITIALIZE */
+
+renderMenu();
+
+renderBuilder();
+
+renderCart();
+
+</script>
+
+</body>
+</html>
+
+
