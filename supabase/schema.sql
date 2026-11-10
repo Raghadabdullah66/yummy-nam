@@ -24,15 +24,93 @@ create table if not exists public.menu_items (
   active boolean not null default true
 );
 
-insert into public.menu_items (id, name, price) values
-  ('sweet',      'Sweet & Spicy Ramyun', 30),
-  ('carbonara',  'Carbonara Ramyun',     30),
-  ('cheese',     'Cheese Ramyun',        30),
-  ('sausage',    'Sausage Corn Dog',     12),
-  ('cheesedog',  'Cheese Corn Dog',      12)
-on conflict (id) do update set name = excluded.name, price = excluded.price;
+alter table public.menu_items
+  add column if not exists name_ar text,
+  add column if not exists category text not null default 'ramyun'
+    check (category in ('ramyun', 'corndog')),
+  add column if not exists img text,
+  add column if not exists sort_order int not null default 0;
+
+-- Seed only once: later edits made from the dashboard are never overwritten.
+insert into public.menu_items (id, name, name_ar, price, category, img, sort_order) values
+  ('sweet',      'Sweet & Spicy Ramyun', 'رامن حار وحلو',     30, 'ramyun',  'images/sweet-spicy-ramyun.png?v=10', 10),
+  ('carbonara',  'Carbonara Ramyun',     'رامن كاربونارا',    30, 'ramyun',  'images/carbonara-ramyun.png?v=10',   20),
+  ('cheese',     'Cheese Ramyun',        'رامن بالجبنة',      30, 'ramyun',  'images/cheese-ramyun.png?v=10',      30),
+  ('sausage',    'Sausage Corn Dog',     'كورن دوغ بالنقانق', 12, 'corndog', 'images/sausage-corn-dog.png?v=1',    40),
+  ('cheesedog',  'Cheese Corn Dog',      'كورن دوغ بالجبنة',  12, 'corndog', 'images/cheese-corn-dog.png?v=1',      50)
+on conflict (id) do nothing;
+
+-- Fills in the new columns for rows created by an earlier version of this file.
+update public.menu_items m
+set name_ar = s.name_ar, category = s.category, img = s.img, sort_order = s.sort_order
+from (values
+  ('sweet',     'رامن حار وحلو',     'ramyun',  'images/sweet-spicy-ramyun.png?v=10', 10),
+  ('carbonara', 'رامن كاربونارا',    'ramyun',  'images/carbonara-ramyun.png?v=10',   20),
+  ('cheese',    'رامن بالجبنة',      'ramyun',  'images/cheese-ramyun.png?v=10',      30),
+  ('sausage',   'كورن دوغ بالنقانق', 'corndog', 'images/sausage-corn-dog.png?v=1',    40),
+  ('cheesedog', 'كورن دوغ بالجبنة',  'corndog', 'images/cheese-corn-dog.png?v=1',      50)
+) as s(id, name_ar, category, img, sort_order)
+where m.id = s.id and m.name_ar is null;
 
 alter table public.menu_items enable row level security;
+
+-- Anyone can read the menu (the site shows it). Only staff can change it.
+drop policy if exists "public read menu" on public.menu_items;
+create policy "public read menu" on public.menu_items
+  for select to anon, authenticated
+  using (true);
+
+drop policy if exists "admins write menu" on public.menu_items;
+create policy "admins write menu" on public.menu_items
+  for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- Order hours shown on the site and enforced by the site's checkout.
+create table if not exists public.settings (
+  key text primary key,
+  value text not null
+);
+
+insert into public.settings (key, value) values
+  ('order_days', 'Sun,Mon,Tue,Wed,Thu'),
+  ('order_open_hour', '18'),
+  ('order_close_hour', '21')
+on conflict (key) do nothing;
+
+alter table public.settings enable row level security;
+
+drop policy if exists "public read settings" on public.settings;
+create policy "public read settings" on public.settings
+  for select to anon, authenticated
+  using (true);
+
+drop policy if exists "admins write settings" on public.settings;
+create policy "admins write settings" on public.settings
+  for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- Public bucket for menu photos. Only staff can upload, replace or delete.
+insert into storage.buckets (id, name, public)
+values ('menu-images', 'menu-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "admins upload menu images" on storage.objects;
+create policy "admins upload menu images" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'menu-images' and public.is_admin());
+
+drop policy if exists "admins update menu images" on storage.objects;
+create policy "admins update menu images" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'menu-images' and public.is_admin())
+  with check (bucket_id = 'menu-images' and public.is_admin());
+
+drop policy if exists "admins delete menu images" on storage.objects;
+create policy "admins delete menu images" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'menu-images' and public.is_admin());
 
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),

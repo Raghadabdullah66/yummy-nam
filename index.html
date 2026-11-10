@@ -1042,7 +1042,8 @@ footer::after{content:none !important;display:none !important}
 
 /* MENU DATA */
 
-var MENU=[
+/* Used only if the live menu cannot be loaded. The live menu lives in Supabase (menu_items). */
+var MENU_FALLBACK=[
  {id:'sweet',name:'Sweet & Spicy Ramyun',nameAr:'رامن حار وحلو',cat:'ramyun',price:30,img:'images/sweet-spicy-ramyun.png?v=10'},
 
  {id:'carbonara',name:'Carbonara Ramyun',nameAr:'رامن كاربونارا',cat:'ramyun',price:30,img:'images/carbonara-ramyun.png?v=10'},
@@ -1053,6 +1054,12 @@ var MENU=[
 
  {id:'cheesedog',name:'Cheese Corn Dog',nameAr:'كورن دوغ بالجبنة',cat:'corndog',price:12,img:'images/cheese-corn-dog.png?v=1'}
 ];
+
+var MENU=MENU_FALLBACK.slice();
+
+/* Order hours. Defaults match the database defaults in schema.sql (settings table). */
+var ORDER_HOURS={days:['Sun','Mon','Tue','Wed','Thu'],open:18,close:21};
+var DAY_AR={Sun:'الأحد',Mon:'الاثنين',Tue:'الثلاثاء',Wed:'الأربعاء',Thu:'الخميس',Fri:'الجمعة',Sat:'السبت'};
 
 var SPICE=[
  ['Mild','خفيف','🌶'],
@@ -1279,6 +1286,7 @@ function renderBuilder(){
 
 
  var m=byId(sel.type);
+ if(!m)return;
 
  $('qv').textContent=sel.qty;
 
@@ -1323,6 +1331,7 @@ $('qp').onclick=function(){
 $('addb').onclick=function(){
 
  var m=byId(sel.type);
+ if(!m)return;
 
  addLine(
   m.id,
@@ -1606,7 +1615,72 @@ function isOrderTime(){
  var p=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Dubai',weekday:'short',hour:'numeric',hourCycle:'h23'}).formatToParts(new Date());
  var day=p.filter(function(x){return x.type==='weekday';})[0].value;
  var hour=+p.filter(function(x){return x.type==='hour';})[0].value;
- return ['Sun','Mon','Tue','Wed','Thu'].indexOf(day)>=0&&hour>=18&&hour<21;
+ return ORDER_HOURS.days.indexOf(day)>=0&&hour>=ORDER_HOURS.open&&hour<ORDER_HOURS.close;
+}
+
+function hourText(h,ar){
+ h=h%24;
+ if(ar)return h<12?h+' صباحاً':((h-12)||12)+' مساءً';
+ return ((h%12)||12)+(h<12?' AM':' PM');
+}
+
+function renderOrderHours(){
+ var el=$('order-hours');
+ var days=ORDER_HOURS.days;
+ var en=days.length
+  ?'Order hours: '+days.join(', ')+', '+hourText(ORDER_HOURS.open)+' – '+hourText(ORDER_HOURS.close)
+  :'Orders are currently closed.';
+ var ar=days.length
+  ?'أوقات استقبال الطلبات: '+days.map(function(d){return DAY_AR[d];}).join('، ')+'، '+hourText(ORDER_HOURS.open,true)+' - '+hourText(ORDER_HOURS.close,true)
+  :'نقفل استقبال الطلبات حالياً.';
+ el.dataset.en=en;
+ el.dataset.ar=ar;
+ el.textContent=tr(en,ar);
+}
+
+/* Loads the live menu and order hours. Keeps the built-in menu if Supabase is unavailable. */
+async function loadSiteData(){
+ var sb=getSupabase();
+ if(!sb)return;
+
+ var m=await sb.from('menu_items')
+  .select('id,name,name_ar,category,price,img')
+  .eq('active',true)
+  .order('sort_order')
+  .order('name');
+ if(!m.error&&m.data){
+  MENU=m.data.map(function(r){
+   return {
+    id:r.id,
+    name:r.name,
+    nameAr:r.name_ar||r.name,
+    cat:r.category,
+    price:Number(r.price),
+    img:r.img||''
+   };
+  });
+ }
+
+ var s=await sb.from('settings').select('key,value');
+ if(!s.error&&s.data){
+  var v={};
+  s.data.forEach(function(r){v[r.key]=r.value;});
+  if(v.order_days!==undefined)ORDER_HOURS.days=v.order_days.split(',').map(function(d){return d.trim();}).filter(Boolean);
+  if(v.order_open_hour!==undefined)ORDER_HOURS.open=+v.order_open_hour;
+  if(v.order_close_hour!==undefined)ORDER_HOURS.close=+v.order_close_hour;
+ }
+
+ cart=cart.filter(function(l){return byId(l.id);});
+ cart.forEach(function(l){l.price=byId(l.id).price;});
+ if(!byId(sel.type)){
+  var first=MENU.filter(function(x){return x.cat==='ramyun';})[0];
+  sel.type=first?first.id:null;
+ }
+
+ renderOrderHours();
+ renderMenu();
+ renderBuilder();
+ renderCart();
 }
 
 $('place').onclick=async function(){
@@ -1614,8 +1688,7 @@ $('place').onclick=async function(){
  if(!cart.length||orderPending)return;
 
  if(!isOrderTime()){
-  alert(tr('Orders are accepted Sunday to Thursday, 6 PM to 9 PM (UAE time).',
-           'نستقبل الطلبات من الأحد إلى الخميس، من 6 مساءً إلى 9 مساءً (توقيت الإمارات).'));
+  alert($('order-hours').textContent);
   return;
  }
 
@@ -1710,7 +1783,7 @@ $('lang-btn').onclick=function(){
  $('lang-btn').textContent=
   currentLang==='ar'?'EN':'عربي';
 
-
+ renderOrderHours();
  renderMenu();
 
  renderBuilder();
@@ -1722,11 +1795,14 @@ $('lang-btn').onclick=function(){
 
 /* INITIALIZE */
 
+renderOrderHours();
 renderMenu();
 
 renderBuilder();
 
 renderCart();
+
+loadSiteData();
 
 </script>
 
