@@ -540,7 +540,7 @@ img{max-width:100%}
 }
 
 .feats .ft{
-  flex:0 1 auto;
+  flex:1 1 0;
   min-width:0;
   gap:4px;
   flex-direction:column;
@@ -550,6 +550,13 @@ img{max-width:100%}
 .feats .ft small{display:none}
 
 .feats .ft b{font-size:9.5px;white-space:nowrap}
+
+.feats .ft img{
+  flex:none;
+  width:20px;
+  height:20px;
+  object-fit:contain;
+}
 
 .ft{
   display:flex;
@@ -842,7 +849,7 @@ footer::after{content:none !important;display:none !important}
   </div>
 
   <div class="ft">
-    <img src="images/cheese-corn-dog.png?v=1" alt="" style="width:20px;height:auto;flex:none">
+    <img src="images/cheese-corn-dog.png?v=1" alt="">
     <div>
       <b data-en="Crispy Corn Dogs" data-ar="كورن دوغ مقرمش">Crispy Corn Dogs</b>
       <small data-en="Golden, cheesy and crunchy."
