@@ -864,7 +864,7 @@ footer::after{content:none !important;display:none !important}
 <section class="best" id="menu">
 
 
-  <div style="position:relative;margin:0 calc(50% - 50vw);width:100vw;filter:drop-shadow(0 10px 12px rgba(60,20,20,.35))"><img src="images/menu-sign-blank.jpg?v=1" alt="" style="width:100%;height:auto;display:block;clip-path:polygon(0 0,100% 0,100% 88%,95% 100%,84% 88%,73% 100%,61% 88%,50% 100%,39% 88%,27% 100%,16% 88%,5% 100%,0 88%)"><h2 data-en="Our Menu" data-ar="قائمتنا" style="position:absolute;left:25%;right:25%;top:0;bottom:12%;margin:0;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2','Fredoka',sans-serif;font-size:clamp(24px,6vw,80px);color:#3a2a55;white-space:nowrap">Our Menu</h2></div>
+  <div style="position:relative;margin:0 calc(50% - 50vw);width:100vw;filter:drop-shadow(0 10px 12px rgba(60,20,20,.35))"><img src="images/menu-sign-blank.jpg?v=1" alt="" style="width:100%;height:clamp(120px,30vw,260px);object-fit:cover;display:block;clip-path:polygon(0 0,100% 0,100% 88%,95% 100%,84% 88%,73% 100%,61% 88%,50% 100%,39% 88%,27% 100%,16% 88%,5% 100%,0 88%)"><h2 data-en="Our Menu" data-ar="قائمتنا" style="position:absolute;left:25%;right:25%;top:0;bottom:12%;margin:0;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2','Fredoka',sans-serif;font-size:clamp(24px,6vw,80px);color:#3a2a55;white-space:nowrap">Our Menu</h2></div>
 
   <div class="tools">
 
@@ -1007,6 +1007,10 @@ footer::after{content:none !important;display:none !important}
     <span id="ptotal">0 AED</span>
 
   </div>
+
+  <p id="order-hours" style="margin:0 0 10px;text-align:center;font-weight:600;color:#3a2a55"
+     data-en="Order hours: Sun–Thu, 6 PM – 9 PM · Fri & Sat closed"
+     data-ar="أوقات استقبال الطلبات: الأحد - الخميس 6 مساءً - 9 مساءً · الجمعة والسبت إجازة">Order hours: Sun–Thu, 6 PM – 9 PM · Fri & Sat closed</p>
 
   <input id="cname" type="text" maxlength="40" autocomplete="name"
          placeholder="Your name / اسمك"
@@ -1620,9 +1624,22 @@ function orderErrorText(err){
            'عذراً، تعذر حفظ طلبك. حاول مرة أخرى.');
 }
 
+function isOrderTime(){
+ var p=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Dubai',weekday:'short',hour:'numeric',hourCycle:'h23'}).formatToParts(new Date());
+ var day=p.filter(function(x){return x.type==='weekday';})[0].value;
+ var hour=+p.filter(function(x){return x.type==='hour';})[0].value;
+ return ['Sun','Mon','Tue','Wed','Thu'].indexOf(day)>=0&&hour>=18&&hour<21;
+}
+
 $('place').onclick=async function(){
 
  if(!cart.length||orderPending)return;
+
+ if(!isOrderTime()){
+  alert(tr('Orders are accepted Sunday to Thursday, 6 PM to 9 PM (UAE time).',
+           'نستقبل الطلبات من الأحد إلى الخميس، من 6 مساءً إلى 9 مساءً (توقيت الإمارات).'));
+  return;
+ }
 
  var nameEl=$('cname'),phoneEl=$('cphone');
  var custName=nameEl.value.trim();
