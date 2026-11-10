@@ -337,21 +337,6 @@ img{max-width:100%}
   margin:7px 0 10px;
 }
 
-.heart{
-  flex:none;
-  width:29px;
-  height:29px;
-  border-radius:50%;
-  background:#f7b6d2;
-  color:#e8789f;
-  font-size:14px;
-}
-
-.heart[aria-pressed="true"]{
-  background:#e8789f;
-  color:white;
-}
-
 .add{
   width:100%;
   border-radius:20px;
@@ -839,6 +824,15 @@ footer::after{content:none !important;display:none !important}
   </div>
 
   <div class="ft">
+    <span>❤️</span>
+    <div>
+      <b data-en="Made with Love" data-ar="محضر بحب">Made with Love</b>
+      <small data-en="Made with care."
+             data-ar="نحضره بكل عناية.">Made with care.</small>
+    </div>
+  </div>
+
+  <div class="ft">
     <span><img src="images/cheese-corn-dog.png?v=1" alt=""></span>
     <div>
       <b data-en="Crispy Corn Dogs" data-ar="كورن دوغ مقرمش">Crispy Corn Dogs</b>
@@ -1069,7 +1063,6 @@ var SPICE=[
 
 var currentLang='en';
 var cat='all';
-var fav={};
 var cart=[];
 var searchText='';
 
@@ -1135,10 +1128,6 @@ function renderMenu(){
 
     <h3>${itemName(m)}</h3>
 
-    <button class="heart"
-      aria-pressed="${fav[m.id]?'true':'false'}"
-      aria-label="Favorite">♥</button>
-
    </div>
 
    <div class="pr">${fmt(m.price)}</div>
@@ -1148,17 +1137,7 @@ function renderMenu(){
    </button>
   `;
 
-  var heart=d.querySelector('.heart');
-
   var add=d.querySelector('.add');
-
-  heart.onclick=function(){
-
-   fav[m.id]=!fav[m.id];
-
-   heart.setAttribute('aria-pressed',fav[m.id]);
-
-  };
 
   add.onclick=function(){
 
