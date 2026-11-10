@@ -65,6 +65,12 @@ create policy "admins update orders" on public.orders
   using (public.is_admin())
   with check (public.is_admin());
 
+-- Staff can delete orders (e.g. end-of-day cleanup from the dashboard).
+drop policy if exists "admins delete orders" on public.orders;
+create policy "admins delete orders" on public.orders
+  for delete to authenticated
+  using (public.is_admin());
+
 -- Staff may only change status; everything the customer sent is locked.
 create or replace function public.orders_guard_update()
 returns trigger
